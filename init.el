@@ -108,14 +108,21 @@
   :hook
   ((python-ts-mode js-ts-mode typescript-ts-mode tsx-ts-mode) . eglot-ensure))
 
-;; Completion
+;; Auto Completion
 (use-package corfu  
   :ensure t
-  :custom
+  :custom  
   (corfu-auto t) 
   (corfu-auto-delay 1)
   :init
   (global-corfu-mode))
+
+;; Need corfu-terminal to get auto-complete working in terminal
+(use-package corfu-terminal
+  :ensure t)
+
+(unless (display-graphic-p)
+  (corfu-terminal-mode +1))
 
 ;; Make sure to detect correct python env
 (use-package pet
