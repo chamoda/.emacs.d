@@ -8,6 +8,7 @@
 * 🌳 [Treesitter](https://tree-sitter.github.io/tree-sitter/) configured.
 * ⌨️ Only using classic keybindings.
 * 🧘 Vanila Emacs with minimial third party packages.
+* 🚧 project.el for project managment
 
 ## Requirements
 
@@ -22,4 +23,8 @@
 * Go to `.emacs.d` and run `cp .env.example.el .env.el` and modify variables as needed.
 * Run `emacs`. It will take some time to initialze all packages.
 * Ones everything intialized, run `M-x treesitter-install-all-language-grammar` to install all grammar for treesitter modes.
+
+## Screenshot
+
+![screenshot](screenshot.png)
 
