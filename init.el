@@ -19,7 +19,7 @@
 ;; No bell, no startup screen
 (setq ring-bell-function 'ignore
       inhibit-startup-screen t
-)
+      )
 
 ;; Disable backup files (my be not a good idea?), lock files and auto save
 (setq make-backup-files nil
@@ -149,10 +149,10 @@
   (setq org-agenda-repeating-timestamp-show-all nil)
   (setq org-agenda-include-diary t)
   (setq org-agenda-sorting-strategy
-      '((agenda time-up habit-down priority-down category-keep)	
-        (todo priority-down category-keep)
-        (tags priority-down category-keep)
-        (search category-keep)))
+	'((agenda time-up habit-down priority-down category-keep)	
+          (todo priority-down category-keep)
+          (tags priority-down category-keep)
+          (search category-keep)))
 
   (add-hook 'org-mode-hook 'org-indent-mode)
   (add-hook 'org-mode-hook 'visual-line-mode)
@@ -163,25 +163,25 @@
 
   (use-package org-contrib
     :ensure t)
-)
+  )
 
 ;; Map to new treesitter modes
 (setq treesit-language-source-alist
-   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-     (cmake "https://github.com/uyha/tree-sitter-cmake")
-     (css "https://github.com/tree-sitter/tree-sitter-css")
-     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-     (go "https://github.com/tree-sitter/tree-sitter-go")
-     (html "https://github.com/tree-sitter/tree-sitter-html")
-     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-     (json "https://github.com/tree-sitter/tree-sitter-json")
-     (make "https://github.com/alemuller/tree-sitter-make")
-     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-     (python "https://github.com/tree-sitter/tree-sitter-python")
-     (toml "https://github.com/tree-sitter/tree-sitter-toml")
-     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+      '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+	(cmake "https://github.com/uyha/tree-sitter-cmake")
+	(css "https://github.com/tree-sitter/tree-sitter-css")
+	(elisp "https://github.com/Wilfred/tree-sitter-elisp")
+	(go "https://github.com/tree-sitter/tree-sitter-go")
+	(html "https://github.com/tree-sitter/tree-sitter-html")
+	(javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+	(json "https://github.com/tree-sitter/tree-sitter-json")
+	(make "https://github.com/alemuller/tree-sitter-make")
+	(markdown "https://github.com/ikatyang/tree-sitter-markdown")
+	(python "https://github.com/tree-sitter/tree-sitter-python")
+	(toml "https://github.com/tree-sitter/tree-sitter-toml")
+	(tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+	(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+	(yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
 (setq major-mode-remap-alist
       '((js-mode . js-ts-mode)
