@@ -4,10 +4,10 @@
 
 ## Features
 
-*📦 Using [straight.el](https://github.com/radian-software/straight.el) package manager.
-*🌳 [Treesitter](https://tree-sitter.github.io/tree-sitter/) configured.
-*⌨️ Only using classic keybindings.
-*🧘 Vanila Emacs with minimial third party packages.
+* 📦 Using [straight.el](https://github.com/radian-software/straight.el) package manager.
+* 🌳 [Treesitter](https://tree-sitter.github.io/tree-sitter/) configured.
+* ⌨️ Only using classic keybindings.
+* 🧘 Vanila Emacs with minimial third party packages.
 
 ## Requirements
 
