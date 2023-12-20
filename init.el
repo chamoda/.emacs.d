@@ -91,7 +91,7 @@
 
 ;; Install packages
 (use-package markdown-mode
-  :defer t)
+  :ensure t)
 
 ;; Initialize C-3PO only if the key is available.
 (if (boundp 'OPENAI_API_KEY)
@@ -130,7 +130,7 @@
 
 ;; Org mode
 (use-package org
-  :straight (:type built-in) ;;(:host github :repo "emacs-straight/org-mode")
+  :straight (:type built-in)
   :ensure t
   :config
   (setq org-agenda-files '("~/org"))
