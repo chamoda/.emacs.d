@@ -3,9 +3,6 @@
 
 ;; User Interface
 ;; Get rid of scroll bar, menubar and toolbar
-
-(print load-path)
-
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
