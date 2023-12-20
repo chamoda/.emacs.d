@@ -1,0 +1,3 @@
+;; OPENAI_API_KEY for c3po
+(setq OPENAI_API_KEY "REPLACE_KEY")
+
