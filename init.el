@@ -33,41 +33,25 @@
 (setq dired-create-destination-dirs 'ask)
 
 ;; Package manager
-(defvar bootstrap-version)
 
-(let ((bootstrap-file
-       (expand-file-name
-        "straight/repos/straight.el/bootstrap.el"
-        (or (bound-and-true-p straight-base-dir)
-            user-emacs-directory)))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+;; Ensure packages
+(setq use-package-always-ensure t)
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
-(straight-use-package 'use-package)
+;; Support installing from git
+(unless (package-installed-p 'vc-use-package)
+  (package-vc-install "https://github.com/slotThe/vc-use-package"))
 
-(use-package straight
-  :custom
-  (setq straight-repository-branch "develop"
-        straight-check-for-modifications 'live
-        straight-use-package-version 'ensure
-        straight-use-package-by-default t
-        straight-recipes-gnu-elpa-use-mirror t))
 
 ;; iSearch
 (use-package isearch
+  :ensure nil
   :init
   (setq isearch-lazy-count t))
 
 ;; Tramp for remote editing
 (use-package tramp
-  :defer t
   :config
   (setq tramp-ssh-controlmaster-options
 	(concat
@@ -83,31 +67,27 @@
   (setq global-auto-revert-non-file-buffers t))
 
 ;; Project.el for project management
-(use-package project
-  :ensure t)
+(use-package project)
 
 ;; Install packages
-(use-package markdown-mode
-  :ensure t)
+(use-package markdown-mode)
 
 ;; Initialize C-3PO only if the key is available.
 (if (boundp 'OPENAI_API_KEY)
     (use-package c3po
-      :straight (:host github :repo "d1egoaz/c3po.el")
+      :vc (:fetcher github :repo "d1egoaz/c3po.el")      
       :config
       (setq c3po-api-key OPENAI_API_KEY))
   ())
 
 ;; Using LSP
 (use-package eglot
-  :ensure t
   :init
   :hook
   ((python-ts-mode js-ts-mode typescript-ts-mode tsx-ts-mode) . eglot-ensure))
 
 ;; Auto Completion
 (use-package corfu  
-  :ensure t
   :custom  
   (corfu-auto t) 
   (corfu-auto-delay 1)
@@ -115,27 +95,21 @@
   (global-corfu-mode))
 
 ;; Need corfu-terminal to get auto-complete working in terminal
-(use-package corfu-terminal
-  :ensure t)
+(use-package corfu-terminal)
 
 (unless (display-graphic-p)
   (corfu-terminal-mode +1))
 
 ;; Make sure to detect correct python env
 (use-package pet
-  :straight (:host github :repo "wyuenho/emacs-pet")
-  :ensure t
   :config
   (add-hook 'python-base-mode-hook 'pet-mode -10))
 
 ;; Js
 (setq js-indent-level 2)
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 
 ;; Org mode
 (use-package org
-  :straight (:type built-in)
-  :ensure t
   :config
   (setq org-agenda-files '("~/org"))
   (setq org-default-notes-file '("~/org/tasks.org"))
@@ -161,9 +135,7 @@
   (define-key global-map "\C-ca" 'org-agenda)
   (define-key global-map "\C-cc" 'org-capture)
 
-  (use-package org-contrib
-    :ensure t)
-  )
+  (use-package org-contrib))
 
 ;; Map to new treesitter modes
 (setq treesit-language-source-alist
@@ -198,3 +170,18 @@
 ;; Load custom files
 (load-file(locate-user-emacs-file "custom/compile-ts.el"))
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages '(corfu-terminal corfu c3po))
+ '(package-vc-selected-packages
+   '((c3po :vc-backend Git :url "https://github.com/d1egoaz/c3po.el")
+     (vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
