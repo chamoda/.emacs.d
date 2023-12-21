@@ -7,9 +7,6 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
-;; Display line numbers everywhere
-(global-display-line-numbers-mode)
-
 ;; Change default frame size
 (setq default-frame-alist '((width . 120) (height . 80)))
 
@@ -29,9 +26,6 @@
 ;; Fido mode everywhere, it's an improved ido mode
 (fido-mode t)
 
-;; Dired
-(setq dired-create-destination-dirs 'ask)
-
 ;; Package manager
 
 ;; Ensure packages
@@ -43,6 +37,12 @@
 (unless (package-installed-p 'vc-use-package)
   (package-vc-install "https://github.com/slotThe/vc-use-package"))
 
+;; Dired
+(use-package dired
+  :ensure nil
+  :init
+  (setq dired-create-destination-dirs 'ask)
+  )
 
 ;; iSearch
 (use-package isearch
@@ -52,7 +52,7 @@
 
 ;; Tramp for remote editing
 (use-package tramp
-  :config
+  :init
   (setq tramp-ssh-controlmaster-options
 	(concat
 	 "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
@@ -62,32 +62,27 @@
 
 ;; Autorevert files and other stuff like dired
 (use-package autorevert 
-  :init (global-auto-revert-mode)
-  :config
-  (setq global-auto-revert-non-file-buffers t))
+  :init
+  (setq global-auto-revert-non-file-buffers t)
+  :custom
+  (global-auto-revert-mode))
 
 ;; Project.el for project management
 (use-package project)
 
-;; Install packages
-(use-package markdown-mode)
-
-;; Initialize C-3PO only if the key is available.
-(if (boundp 'OPENAI_API_KEY)
-    (use-package c3po
-      :vc (:fetcher github :repo "d1egoaz/c3po.el")      
-      :config
-      (setq c3po-api-key OPENAI_API_KEY))
-  ())
+(use-package c3po
+  :when (boundp 'OPENAI_API_KEY)
+  :vc (:fetcher github :repo "d1egoaz/c3po.el")      
+  :init
+  (setq c3po-api-key OPENAI_API_KEY))
 
 ;; Using LSP
 (use-package eglot
-  :init
   :hook
   ((python-ts-mode js-ts-mode typescript-ts-mode tsx-ts-mode) . eglot-ensure))
 
 ;; Auto Completion
-(use-package corfu  
+(use-package corfu
   :custom  
   (corfu-auto t) 
   (corfu-auto-delay 1)
@@ -95,22 +90,20 @@
   (global-corfu-mode))
 
 ;; Need corfu-terminal to get auto-complete working in terminal
-(use-package corfu-terminal)
-
-(unless (display-graphic-p)
-  (corfu-terminal-mode +1))
+(use-package corfu-terminal
+  :custom
+  (unless (display-graphic-p)
+    (corfu-terminal-mode +1))
+  )
 
 ;; Make sure to detect correct python env
 (use-package pet
-  :config
+  :init
   (add-hook 'python-base-mode-hook 'pet-mode -10))
-
-;; Js
-(setq js-indent-level 2)
 
 ;; Org mode
 (use-package org
-  :config
+  :init
   (setq org-agenda-files '("~/org"))
   (setq org-default-notes-file '("~/org/tasks.org"))
   (setq org-log-into-drawer t)
@@ -127,15 +120,28 @@
           (todo priority-down category-keep)
           (tags priority-down category-keep)
           (search category-keep)))
-
-  (add-hook 'org-mode-hook 'org-indent-mode)
-  (add-hook 'org-mode-hook 'visual-line-mode)
-  
-  (define-key global-map "\C-cl" 'org-store-link)
-  (define-key global-map "\C-ca" 'org-agenda)
-  (define-key global-map "\C-cc" 'org-capture)
-
+  :hook 
+  ((org-mode . org-indent-mode)
+   (org-mode . visual-line-mode))
+  :bind
+  (
+   ("C-c l" . org-store-link)
+   ("C-c a" . org-agenda)
+   ("C-c c" . org-capture)
+   )
+  :custom
   (use-package org-contrib))
+
+;; Install lang support
+
+;; Javascript
+(use-package js
+  :config
+  (setq js-indent-level 2)
+  )
+
+;; Markdown
+(use-package markdown-mode)
 
 ;; Map to new treesitter modes
 (setq treesit-language-source-alist
@@ -170,18 +176,3 @@
 ;; Load custom files
 (load-file(locate-user-emacs-file "custom/compile-ts.el"))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages '(corfu-terminal corfu c3po))
- '(package-vc-selected-packages
-   '((c3po :vc-backend Git :url "https://github.com/d1egoaz/c3po.el")
-     (vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
