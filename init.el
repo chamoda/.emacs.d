@@ -41,8 +41,7 @@
 (use-package dired
   :ensure nil
   :init
-  (setq dired-create-destination-dirs 'ask)
-  )
+  (setq dired-create-destination-dirs 'ask))
 
 ;; iSearch
 (use-package isearch
@@ -64,7 +63,7 @@
 (use-package autorevert 
   :init
   (setq global-auto-revert-non-file-buffers t)
-  :custom
+  :config
   (global-auto-revert-mode))
 
 ;; Project.el for project management
