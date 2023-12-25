@@ -167,7 +167,8 @@
 	(python-mode . python-ts-mode)))
 
 ;; Auto mapping from file extention
-(add-to-list 'auto-mode-alist '("\\.[jt]sx?\\'" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.[js]x?\\'" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.mdx\\'" . markdown-mode))
 
 ;; Load theme
 (load-theme 'deeper-blue t)
