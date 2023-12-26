@@ -23,9 +23,6 @@
       create-lockfiles nil
       auto-save-default nil)
 
-;; Fido mode everywhere, it's an improved ido mode
-(fido-mode t)
-
 ;; Package manager
 
 ;; Ensure packages
@@ -74,6 +71,30 @@
   :vc (:fetcher github :repo "d1egoaz/c3po.el")      
   :init
   (setq c3po-api-key OPENAI_API_KEY))
+
+;; Vertico
+(use-package vertico
+  :init
+  (vertico-mode))
+
+;; Persist history over restarts.
+(use-package savehist
+  :init
+  (savehist-mode))
+
+;; Orderless
+(use-package orderless
+  :init
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+
+;; Marginilia
+(use-package marginalia
+  :bind (:map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+  :init
+  (marginalia-mode))
 
 ;; Using LSP
 (use-package eglot
@@ -175,4 +196,3 @@
 
 ;; Load custom files
 (load-file(locate-user-emacs-file "custom/compile-ts.el"))
-
