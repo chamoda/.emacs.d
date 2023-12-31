@@ -11,7 +11,7 @@
 (setq default-frame-alist '((width . 120) (height . 80)))
 
 ;; Fonts
-(set-face-attribute 'default nil :height 136)
+(set-face-attribute 'default nil :height 142)
 
 ;; No bell, no startup screen
 (setq ring-bell-function 'ignore
@@ -64,13 +64,20 @@
   (global-auto-revert-mode))
 
 ;; Project.el for project management
-(use-package project)
+(use-package project
+  :custom
+  (project-switch-commands 'project-find-file))
 
+;; AI
 (use-package c3po
   :when (boundp 'OPENAI_API_KEY)
-  :vc (:fetcher github :repo "d1egoaz/c3po.el")      
+  :vc (:fetcher github :repo "d1egoaz/c3po.el")
   :init
   (setq c3po-api-key OPENAI_API_KEY))
+
+(setq chatgpt-shell-openai-key OPENAI_API_KEY)
+(use-package chatgpt-shell
+  :vc (:fetcher github :repo "xenodium/chatgpt-shell"))
 
 ;; Vertico
 (use-package vertico
@@ -92,7 +99,7 @@
 ;; Marginilia
 (use-package marginalia
   :bind (:map minibuffer-local-map
-         ("M-A" . marginalia-cycle))
+              ("M-A" . marginalia-cycle))
   :init
   (marginalia-mode))
 
@@ -152,7 +159,17 @@
   :custom
   (use-package org-contrib))
 
+(use-package org-roam
+  :config
+  (setq org-roam-directory "~/org-roam"))
+
 ;; Install lang support
+(add-to-list 'safe-local-variable-values '(indent-tabs-mode . nil))
+
+;; Fix tab isssue in tsx-ts-mode
+(add-hook 'tsx-ts-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)))
 
 ;; Javascript
 (use-package js
@@ -188,7 +205,7 @@
 	(python-mode . python-ts-mode)))
 
 ;; Auto mapping from file extention
-(add-to-list 'auto-mode-alist '("\\.[js]x?\\'" . tsx-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.[tj]sx?\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.mdx\\'" . markdown-mode))
 
 ;; Load theme
@@ -196,3 +213,4 @@
 
 ;; Load custom files
 (load-file(locate-user-emacs-file "custom/compile-ts.el"))
+
