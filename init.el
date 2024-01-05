@@ -1,12 +1,6 @@
 ;; Load env
 (load "~/.emacs.d/.env.el" t)
 
-;; User Interface
-;; Get rid of scroll bar, menubar and toolbar
-(scroll-bar-mode -1)
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-
 ;; Change default frame size
 (setq default-frame-alist '((width . 120) (height . 80)))
 
@@ -93,14 +87,14 @@
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
-;; Marginilia
+;; marginilia
 (use-package marginalia
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
   :init
   (marginalia-mode))
 
-;; Trying out consult
+; Trying out consult
 (use-package consult
   :bind (;; C-c bindings in `mode-specific-map'
          ("C-c M-x" . consult-mode-command)
@@ -185,6 +179,8 @@
   ((python-ts-mode js-ts-mode typescript-ts-mode tsx-ts-mode) . eglot-ensure))
 
 ;; Auto Completion
+(global-set-key [remap dabbrev-expand] 'hippie-expand)
+
 (use-package corfu
   :custom  
   (corfu-auto t) 
@@ -235,9 +231,15 @@
   :custom
   (use-package org-contrib))
 
+(use-package emacsql)
+
 (use-package org-roam
-  :config
-  (setq org-roam-directory "~/org-roam"))
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory "~/org-roam")
+  (org-roam-complete-everywhere)
+  (org-roam-database-connector 'sqlite-builtin))
 
 ;; Install lang support
 (add-to-list 'safe-local-variable-values '(indent-tabs-mode . nil))
@@ -285,7 +287,29 @@
 (add-to-list 'auto-mode-alist '("\\.mdx\\'" . markdown-mode))
 
 ;; Load theme
-(load-theme 'deeper-blue t)
+(load-theme 'modus-vivendi t)
+
+;; Custom background color for modus-vivendi
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:background "#18181b")))))
+
+;; User Interface
+;; Get rid of scroll bar, menubar and toolbar
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
 
 ;; Load custom files
 (load-file(locate-user-emacs-file "custom/compile-ts.el"))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(emacsql-sqlite3 emacsql-sqlite-module emacs-sqlite-common emacsql-sqlite-builtin web-mode vertico vc-use-package typescript-mode pet org-roam org-contrib orderless markdown-mode marginalia magit gptel corfu-terminal consult chatgpt-shell c3po)))
