@@ -18,11 +18,12 @@
       auto-save-default nil)
 
 ;; Package manager
+(package-initialize)
 
 ;; Ensure packages
 (setq use-package-always-ensure t)
 (add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+             '("melpa" . "https://melpa.org/packages/") t)
 
 ;; Support installing from git
 (unless (package-installed-p 'vc-use-package)
@@ -231,7 +232,7 @@
   :custom
   (use-package org-contrib))
 
-(use-package emacsql)
+(use-package emacsql-sqlite-builtin)
 
 (use-package org-roam
   :init
@@ -239,7 +240,7 @@
   :custom
   (org-roam-directory "~/org-roam")
   (org-roam-complete-everywhere)
-  (org-roam-database-connector 'sqlite-builtin))
+  (org-roam-database-connector 'emacsql-sqlite))
 
 ;; Install lang support
 (add-to-list 'safe-local-variable-values '(indent-tabs-mode . nil))
@@ -305,11 +306,10 @@
 
 ;; Load custom files
 (load-file(locate-user-emacs-file "custom/compile-ts.el"))
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(emacsql-sqlite3 emacsql-sqlite-module emacs-sqlite-common emacsql-sqlite-builtin web-mode vertico vc-use-package typescript-mode pet org-roam org-contrib orderless markdown-mode marginalia magit gptel corfu-terminal consult chatgpt-shell c3po)))
+   '(emacsql-sqlite-builtin vertico vc-use-package pet org-roam orderless markdown-mode marginalia magit gptel corfu-terminal consult)))
