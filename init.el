@@ -359,7 +359,7 @@
 		languagetool-correction-language "en-US"
 		languagetool-console-command "~/.languagetool/languagetool-commandline.jar"
 		languagetool-server-command "~/.languagetool/languagetool-server.jar")
-)
+  )
 
 ;; Templates
 (use-package yasnippet
