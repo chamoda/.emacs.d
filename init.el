@@ -1,3 +1,5 @@
+;; -*- coding: utf-8; lexical-binding: t -*-
+
 ;; Load env
 (load "~/.emacs.d/.env.el" t)
 
@@ -6,6 +8,9 @@
 
 ;; Fonts
 (set-face-attribute 'default nil :height 160)
+
+;; Tab width
+(setq-default tab-width 4)
 
 ;; No bell, no startup screen
 (setq ring-bell-function 'ignore
@@ -41,15 +46,16 @@
   :init
   (setq isearch-lazy-count t)
   (setq case-fold-search t)
+  (setq search-whitespace-regexp ".*?")
   )
 
 ;; Tramp for remote editing
 (use-package tramp
   :init
   (setq tramp-ssh-controlmaster-options
-	(concat
-	 "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
-	 "-o ControlMaster=auto -o ControlPersist=yes"))
+		(concat
+		 "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
+		 "-o ControlMaster=auto -o ControlPersist=yes"))
   (setq tramp-verbose 7)
   (setq vc-handled-backends '(Git)))
 
@@ -140,13 +146,13 @@
          ("M-s k" . consult-keep-lines)
          ("M-s u" . consult-focus-lines)
          ("M-s e" . consult-isearch-history)
-	 
+		 
          :map isearch-mode-map
          ("M-e" . consult-isearch-history)         
          ("M-s e" . consult-isearch-history)       
          ("M-s l" . consult-line)                  
          ("M-s L" . consult-line-multi)            
-	 
+		 
          :map minibuffer-local-map
          ("M-s" . consult-history)                 
          ("M-r" . consult-history))                
@@ -183,7 +189,7 @@
   (setq eglot-autoshutdown t)
   (setq eglot-confirm-server-initiated-edits nil)
   :hook
-  ((python-ts-mode js-ts-mode typescript-ts-mode tsx-ts-mode) . eglot-ensure))
+  ((python-ts-mode js-ts-mode typescript-ts-mode tsx-ts-mode go-ts-mode) . eglot-ensure))
 
 ;; LSP performance improvements
 (setq eldoc-idle-delay 0.5)
@@ -221,10 +227,12 @@
     (corfu-terminal-mode +1))
   )
 
-;; Make sure to detect correct python env
-(use-package pet
-  :init
-  (add-hook 'python-base-mode-hook 'pet-mode -10))
+;; Multiple cursors
+(use-package multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 
 ;; Org mode
 (use-package org
@@ -244,7 +252,7 @@
   (setq org-agenda-repeating-timestamp-show-all nil)
   (setq org-agenda-include-diary t)
   (setq org-agenda-sorting-strategy
-	'((agenda time-up habit-down priority-down category-keep)	
+		'((agenda time-up habit-down priority-down category-keep)	
           (todo priority-down category-keep)
           (tags priority-down category-keep)
           (search category-keep)))
@@ -293,9 +301,9 @@
   (org-roam-db-autosync-mode t)
   (org-roam-database-connector 'sqlite-builtin)
   :bind (("C-c n l" . org-roam-buffer-toggle)
-	 ("C-c n f" . org-roam-node-find)
-	 ("C-c n i" . org-roam-node-insert)
-	 :map org-mode-map ("C-M-i" . completion-at-point)))
+		 ("C-c n f" . org-roam-node-find)
+		 ("C-c n i" . org-roam-node-insert)
+		 :map org-mode-map ("C-M-i" . completion-at-point)))
 
 ;; Install lang support
 (add-to-list 'safe-local-variable-values '(indent-tabs-mode . nil))
@@ -305,53 +313,58 @@
           (lambda ()
             (setq indent-tabs-mode nil)))
 
-;; Javascript
-(use-package js
-  :config
-  (setq js-indent-level 2)
-  )
-
 ;; Markdown
 (use-package markdown-mode)
 
-;; Map to new treesitter modes
-(setq treesit-language-source-alist
-      '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-	(cmake "https://github.com/uyha/tree-sitter-cmake")
-	(css "https://github.com/tree-sitter/tree-sitter-css")
-	(elisp "https://github.com/Wilfred/tree-sitter-elisp")
-	(go "https://github.com/tree-sitter/tree-sitter-go")
-	(html "https://github.com/tree-sitter/tree-sitter-html")
-	(javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-	(json "https://github.com/tree-sitter/tree-sitter-json")
-	(make "https://github.com/alemuller/tree-sitter-make")
-	(markdown "https://github.com/ikatyang/tree-sitter-markdown")
-	(python "https://github.com/tree-sitter/tree-sitter-python")
-	(toml "https://github.com/tree-sitter/tree-sitter-toml")
-	(tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-	(typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-	(yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+;; Set treesitter modes automatically
+(use-package treesit-auto
+  :config
+  (global-treesit-auto-mode))
 
-(setq major-mode-remap-alist
-      '((js-mode . js-ts-mode)
-	(js-json-mode . json-ts-mode)
-	(typescript-mode . typescript-ts-mode)
-	(python-mode . python-ts-mode)))
+;; Javascript
+(use-package js
+  :config
+  (setq js-indent-level 2))
 
-;; Auto mapping from file extention
 (add-to-list 'auto-mode-alist '("\\.[tj]sx?\\'" . tsx-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.mdx\\'" . markdown-mode))
+
+;; Python
+;; Make sure to detect correct python env
+(use-package pet
+  :init
+  (add-hook 'python-base-mode-hook 'pet-mode -10))
+;; For jinja template support
+(use-package jinja2-mode)
+
+;; Golang
+(use-package go-ts-mode
+  :init
+  (setq go-ts-mode-indent-offset 4))
+
+(add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . go-mod-ts-mode))
+
+(defun eglot-format-buffer-on-save ()
+  (add-hook 'before-save-hook #'eglot-format-buffer -10 t))
+
+(add-hook 'go-ts-mode-hook #'eglot-format-buffer-on-save)
 
 ;; Spelling and grammar
 (use-package languagetool
   :init
   (setq languagetool-java-arguments '("-Dfile.encoding=UTF-8")
-	languagetool-suggestion-level "PICKY"
-	languagetool-mother-tongue "en-US"
-	languagetool-correction-language "en-US"
-	languagetool-console-command "~/.languagetool/languagetool-commandline.jar"
-	languagetool-server-command "~/.languagetool/languagetool-server.jar")
-  )
+		languagetool-suggestion-level "PICKY"
+		languagetool-mother-tongue "en-US"
+		languagetool-correction-language "en-US"
+		languagetool-console-command "~/.languagetool/languagetool-commandline.jar"
+		languagetool-server-command "~/.languagetool/languagetool-server.jar")
+)
+
+;; Templates
+(use-package yasnippet
+  :init
+  (yas-global-mode 1))
 
 ;; Theme
 (use-package gruber-darker-theme)
@@ -362,7 +375,3 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-
-;; Load custom files
-(load-file(locate-user-emacs-file "custom/compile-ts.el"))
-

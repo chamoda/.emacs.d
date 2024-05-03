@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: react-component
+# key: <rc
+# --
+
+export default function $1(){
+  return (
+    <div></div>
+  )
+}
