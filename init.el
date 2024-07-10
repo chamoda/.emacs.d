@@ -3,19 +3,27 @@
 ;; Load env
 (load "~/.emacs.d/.env.el" t)
 
-;; Change default frame size
-(setq default-frame-alist '((width . 120) (height . 60)))
-
-;; Fonts
-(set-face-attribute 'default nil :height 160)
-
-;; Tab width
-(setq-default tab-width 4)
-
-;; No bell, no startup screen
-(setq ring-bell-function 'ignore
+(use-package emacs
+  :config
+  (setq ring-bell-function 'ignore
       inhibit-startup-screen t
       )
+  (setq column-number-mode t)  
+  (setq-default tab-width 4)
+  ;; Never insert tabs
+  (setq-default indent-tabs-mode nil) 
+  ;; Fonts
+  (add-to-list 'default-frame-alist `(font . ,"Iosevka-16"))
+  ;; User interface
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+)
+
+;; Theme
+(use-package gruber-darker-theme
+  :config
+  (load-theme 'gruber-darker t))
 
 ;; Disable backup files, lock files and auto save
 (setq make-backup-files nil
@@ -39,6 +47,11 @@
   :ensure nil
   :init
   (setq dired-create-destination-dirs 'ask))
+
+;; Repeat
+(use-package repeat
+  :ensure nil
+  :init (repeat-mode 1))
 
 ;; iSearch
 (use-package isearch
@@ -84,6 +97,8 @@
 
 ;; Persist history over restarts.
 (use-package savehist
+  :custom
+  (add-to-list 'savehist-additional-variables 'corfu-history)
   :init
   (savehist-mode))
 
@@ -192,29 +207,34 @@
   ((python-ts-mode js-ts-mode typescript-ts-mode tsx-ts-mode go-ts-mode) . eglot-ensure))
 
 ;; LSP performance improvements
-(setq eldoc-idle-delay 0.5)
+(setq eldoc-idle-delay 0.2)
 (setq flymake-no-changes-timeout 2)
 (setq eldoc-echo-area-prefer-doc-buffer t)
 (fset #'jsonrpc--log-event #'ignore)
 (setq eglot-events-buffer-size 0)
 (setq eglot-sync-connect nil)
 (setq eglot-connect-timeout nil)
-(setq eglot-send-changes-idle-time 0.75)
+(setq eglot-send-changes-idle-time 0.25) ;; was 0.75
 
 ;; Garbage collector
 (use-package gcmh
   :init
   (setq gcmh-high-cons-threshold 536870912) ;; 512MB
-  (setq gcmh-verbose t)
+  (setq gcmh-verbose nil)
   (gcmh-mode 1))
+
+;; Reformat buffers
+(use-package reformatter)
 
 ;; Auto Completion
 (global-set-key [remap dabbrev-expand] 'dabbrev-expand)
 (use-package corfu
   :custom  
   (corfu-auto t)
-  (corfu-auto-delay 0.10)
+  (corfu-auto-delay 0.05)
   (corfu-auto-prefix 1)
+  (corfu-popupinfo-delay 0.05)
+  (corfu-preselect-first f)
   :init
   (global-corfu-mode)
   (corfu-history-mode)
@@ -256,9 +276,6 @@
           (todo priority-down category-keep)
           (tags priority-down category-keep)
           (search category-keep)))
-  (print org-format-latex-options)
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0))
-  (set-default 'preview-scale-function 1.2)
   (setq org-startup-with-inline-images t)
   (setq org-image-actual-width nil)
   (setq org-confirm-babel-evaluate nil)
@@ -324,10 +341,10 @@
 ;; Javascript
 (use-package js
   :config
-  (setq js-indent-level 2))
-
-(add-to-list 'auto-mode-alist '("\\.[tj]sx?\\'" . tsx-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.mdx\\'" . markdown-mode))
+  (setq js-indent-level 2)
+  (add-to-list 'auto-mode-alist '("\\.[tj]sx?\\'" . tsx-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.mdx\\'" . markdown-mode))
+)
 
 ;; Python
 ;; Make sure to detect correct python env
@@ -340,38 +357,30 @@
 ;; Golang
 (use-package go-ts-mode
   :init
-  (setq go-ts-mode-indent-offset 4))
+  (setq go-ts-mode-indent-offset 4)
+  :config
+  (reformatter-define go-format
+    :program "goimports"
+    :args '("/dev/stdin"))
+  (add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.mod\\'" . go-mod-ts-mode))
+  :hook
+  (go-ts-mode . go-format-on-save-mode)
+)
 
-(add-to-list 'auto-mode-alist '("\\.go\\'" . go-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . go-mod-ts-mode))
-
-(defun eglot-format-buffer-on-save ()
-  (add-hook 'before-save-hook #'eglot-format-buffer -10 t))
-
-(add-hook 'go-ts-mode-hook #'eglot-format-buffer-on-save)
-
-;; Spelling and grammar
-(use-package languagetool
+;; Yaml
+(use-package yaml-ts-mode
   :init
-  (setq languagetool-java-arguments '("-Dfile.encoding=UTF-8")
-		languagetool-suggestion-level "PICKY"
-		languagetool-mother-tongue "en-US"
-		languagetool-correction-language "en-US"
-		languagetool-console-command "~/.languagetool/languagetool-commandline.jar"
-		languagetool-server-command "~/.languagetool/languagetool-server.jar")
-  )
+  (setq yaml-ts-mode-indent-offset 2)
+  :config
+  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-ts-mode))
+  (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
+)
 
 ;; Templates
 (use-package yasnippet
   :init
-  (yas-global-mode 1))
+  (yas-global-mode nil))
 
-;; Theme
-(use-package gruber-darker-theme)
-(load-theme 'gruber-darker t)
-(add-to-list 'default-frame-alist `(font . ,"Iosevka"))
 
-;; User Interface
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+

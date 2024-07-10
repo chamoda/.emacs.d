@@ -1,5 +1,3 @@
-![banner](banner.png)
-
 # My Emacs Config
 
 ## Features

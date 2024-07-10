@@ -3,12 +3,19 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-		electric-newline-and-maybe-indent
-		indent-for-tab-command
-		))
+        electric-newline-and-maybe-indent
+        indent-for-tab-command
+        markdown-outdent-or-delete
+        org-self-insert-command
+        sgml-slash
+        ))
 
 (setq mc/cmds-to-run-once
       '(
-		beginning-of-buffer
-		consult-yank-pop
-		))
+        beginning-of-buffer
+        consult-buffer
+        consult-yank-pop
+        end-of-buffer
+        mouse-set-region
+        xref-find-definitions
+        ))
