@@ -119,7 +119,6 @@
   (which-key-mode)
   (setq which-key-idle-delay 0.8))
 
-
 ;; Editor config
 (use-package editorconfig
   :ensure t
@@ -220,7 +219,6 @@
    )
   :config
   (use-package org-contrib) ;; this is not running?
-  (use-package ob-mermaid)
   (require 'org-checklist)
   (require 'org-tempo)
 
@@ -228,7 +226,7 @@
   
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((python . t)(shell . t)(mermaid . t)))
+   '((python . t)(shell . t)))
   (add-to-list 'org-modules 'org-tempo t)
   (add-to-list 'org-modules 'org-checklist t)
 
