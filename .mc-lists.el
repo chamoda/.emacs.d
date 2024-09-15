@@ -5,7 +5,9 @@
       '(
         electric-newline-and-maybe-indent
         indent-for-tab-command
+        kill-region
         markdown-outdent-or-delete
+        org-beginning-of-line
         org-self-insert-command
         sgml-slash
         ))
@@ -17,5 +19,6 @@
         consult-yank-pop
         end-of-buffer
         mouse-set-region
+        org-end-of-line
         xref-find-definitions
         ))
