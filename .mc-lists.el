@@ -5,9 +5,12 @@
       '(
         electric-newline-and-maybe-indent
         indent-for-tab-command
+        keyboard-escape-quit
         kill-region
         markdown-outdent-or-delete
         org-beginning-of-line
+        org-kill-line
+        org-promote-subtree
         org-self-insert-command
         sgml-slash
         ))
@@ -19,6 +22,8 @@
         consult-yank-pop
         end-of-buffer
         mouse-set-region
+        org-cycle
         org-end-of-line
+        undo-redo
         xref-find-definitions
         ))

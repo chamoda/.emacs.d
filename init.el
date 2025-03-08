@@ -133,6 +133,7 @@
   :hook
   ((python-ts-mode js-ts-mode typescript-ts-mode tsx-ts-mode go-ts-mode) . eglot-ensure))
 
+
 ;; LSP performance improvements
 (setq eldoc-idle-delay 0.2)
 (setq flymake-no-changes-timeout 2)
@@ -221,6 +222,8 @@
   (use-package org-contrib) ;; this is not running?
   (require 'org-checklist)
   (require 'org-tempo)
+  (require 'org-habit)
+  (define-key org-mode-map (kbd "C-c C-r") verb-command-map)
 
   (setq org-babel-python-command "python3")
   
@@ -229,6 +232,7 @@
    '((python . t)(shell . t)))
   (add-to-list 'org-modules 'org-tempo t)
   (add-to-list 'org-modules 'org-checklist t)
+  (add-to-list 'org-modules 'org-habbit t)
 
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images))
 
@@ -248,8 +252,19 @@
 		 ("C-c n i" . org-roam-node-insert)
 		 :map org-mode-map ("C-M-i" . completion-at-point)))
 
+
+;; Verb
+(use-package verb)
+
 ;; Install lang support
 (add-to-list 'safe-local-variable-values '(indent-tabs-mode . nil))
+
+;; CSS
+(use-package css-mode
+  :ensure t
+  :config
+  (setq css-indent-offset 2))
+
 
 ;; Fix tab isssue in tsx-ts-mode
 (add-hook 'tsx-ts-mode-hook
@@ -277,8 +292,16 @@
 (use-package pet
   :init
   (add-hook 'python-base-mode-hook 'pet-mode -10))
+
 ;; For jinja template support
 (use-package jinja2-mode)
+
+;; For all other web templating needs
+(use-package web-mode
+  :ensure t
+  :config
+  (setq web-mode-markup-indent-offset 2)
+  (add-to-list 'auto-mode-alist '("\\.liquid\\'" . web-mode)))
 
 ;; Golang
 (use-package go-ts-mode
@@ -301,12 +324,30 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode))
-)
+  )
+
+;; Expand region
+(use-package expand-region
+  :config
+  (global-set-key (kbd "C-=") 'er/expand-region))
 
 ;; Templates
 (use-package yasnippet
   :init
   (yas-global-mode nil))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(expand-region rfc-mode web-mode liquid-mode verb yasnippet-snippets yasnippet which-key vterm vertico vc-use-package treesit-auto restclient reformatter proof-general pet org-super-agenda org-roam org-contrib orderless ob-mermaid multiple-cursors markdown-mode marginalia magit languagetool jinja2-mode gruber-darker-theme gptel go-mode gcmh flymake-yamllint emacsql-sqlite-builtin eglot editorconfig devdocs corfu-terminal consult)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
 
 
