@@ -331,10 +331,6 @@
   :config
   (global-set-key (kbd "C-=") 'er/expand-region))
 
-;; Templates
-(use-package yasnippet
-  :init
-  (yas-global-mode nil))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
