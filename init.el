@@ -173,7 +173,7 @@
         eglot-send-changes-idle-time 0.25)
   (fset #'jsonrpc--log-event #'ignore)
   :hook
-  ((python-ts-mode js-ts-mode typescript-ts-mode tsx-ts-mode go-ts-mode rust-mode) . eglot-ensure))
+  ((python-ts-mode js-ts-mode typescript-ts-mode tsx-ts-mode go-ts-mode rust-mode rust-ts-mode) . eglot-ensure))
 
 ;; Project management
 (use-package project
@@ -261,7 +261,14 @@
 (use-package rust-mode
   :init
   (setq rust-mode-treesitter-derive t)
-  (setq rust-format-on-save t))
+  (setq rust-format-on-save t)
+  :hook
+  ((rust-mode rust-ts-mode) . eglot-ensure))
+
+;; Format on save for rust-ts-mode using eglot
+(add-hook 'rust-ts-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook 'eglot-format-buffer nil t)))
 
 ;; Markdown
 (use-package markdown-mode)
