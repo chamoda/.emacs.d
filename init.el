@@ -91,9 +91,8 @@
 
 ;; Persist history over restarts
 (use-package savehist
-  :custom
-  (add-to-list 'savehist-additional-variables 'corfu-history)
   :init
+  (setq savehist-additional-variables '(corfu-history))
   (savehist-mode))
 
 ;; Orderless
@@ -111,7 +110,6 @@
   (marginalia-mode))
 
 ;; Auto Completion
-(global-set-key [remap dabbrev-expand] 'dabbrev-expand)
 (use-package corfu
   :custom  
   (corfu-auto t)
@@ -187,7 +185,7 @@
         (concat
          "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
          "-o ControlMaster=auto -o ControlPersist=yes")
-        tramp-verbose 7
+        tramp-verbose 1
         vc-handled-backends '(Git)))
 
 ;; Reformat buffers
@@ -268,6 +266,7 @@
 ;; Format on save for rust-ts-mode using eglot
 (add-hook 'rust-ts-mode-hook
           (lambda ()
+            (setq-local rust-format-on-save t)
             (add-hook 'before-save-hook 'eglot-format-buffer nil t)))
 
 ;; Markdown
@@ -281,7 +280,7 @@
 (use-package org
   :init
   (setq org-agenda-files '("~/org")
-        org-default-notes-file '("~/org/tasks.org")
+        org-default-notes-file "~/org/tasks.org"
         org-log-into-drawer t
         org-log-done 'time
         org-cycle-separator-lines 0
