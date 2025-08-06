@@ -43,7 +43,7 @@
   (setq-default tab-width 4
                 indent-tabs-mode nil)
   ;; Fonts
-  (add-to-list 'default-frame-alist `(font . ,"Iosevka-16"))
+  (add-to-list 'default-frame-alist `(font . ,"Iosevka-17"))
   ;; User interface
   (menu-bar-mode -1)
   (tool-bar-mode -1)
