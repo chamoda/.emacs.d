@@ -170,8 +170,11 @@
         eglot-connect-timeout nil
         eglot-send-changes-idle-time 0.25)
   (fset #'jsonrpc--log-event #'ignore)
+  :config
+  ;; Configure C/C++ server
+  (add-to-list 'eglot-server-programs '((c-mode c-ts-mode c++-mode c++-ts-mode) . ("clangd")))
   :hook
-  ((python-ts-mode js-ts-mode typescript-ts-mode tsx-ts-mode go-ts-mode rust-mode rust-ts-mode) . eglot-ensure))
+  ((python-ts-mode js-ts-mode typescript-ts-mode tsx-ts-mode go-ts-mode rust-mode rust-ts-mode c-mode c-ts-mode) . eglot-ensure))
 
 ;; Project management
 (use-package project
@@ -254,6 +257,11 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-ts-mode)))
+
+;; C/C++
+(use-package cc-mode
+  :ensure nil
+)
 
 ;; Rust
 (use-package rust-mode
