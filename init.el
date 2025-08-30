@@ -72,7 +72,8 @@
   :ensure nil
   :init
   (setq dired-create-destination-dirs 'ask
-        dired-mouse-drag-files t))
+        dired-mouse-drag-files t
+        delete-by-moving-to-trash t))
 
 ;; Autorevert files and other stuff like dired
 (use-package autorevert 
