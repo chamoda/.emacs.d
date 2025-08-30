@@ -71,7 +71,8 @@
 (use-package dired
   :ensure nil
   :init
-  (setq dired-create-destination-dirs 'ask))
+  (setq dired-create-destination-dirs 'ask
+        dired-mouse-drag-files t))
 
 ;; Autorevert files and other stuff like dired
 (use-package autorevert 
