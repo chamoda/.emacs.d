@@ -8,6 +8,7 @@
 ## Requirements
 
 * Emacs 30.2 >= compiled with treesitter support.
+* Intall Ioveska font.
 * LSP servers for eglot.
 
 ## Build Emacs
@@ -31,8 +32,6 @@ Buling emacs from source is reccomended for fine grained control over build time
 
 * `git clone git@github.com:chamoda/.emacs.d.git` in your home folder.
 * Run `emacs`. It will take some time to initialze all packages.
-* Ones everything intialized, run `M-x treesitter-install-all-language-grammar` to install all grammar for treesitter modes.
-* Intall font seperately.
 
 ## Screenshot
 
