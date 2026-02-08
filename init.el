@@ -47,7 +47,8 @@
   ;; User interface
   (menu-bar-mode -1)
   (tool-bar-mode -1)
-  (scroll-bar-mode -1))
+  (scroll-bar-mode -1)
+  (pixel-scroll-precision-mode 1))
 
 ;;; ==================================
 ;;; UI & THEME CONFIGURATION
@@ -73,7 +74,11 @@
   :init
   (setq dired-create-destination-dirs 'ask
         dired-mouse-drag-files t
-        delete-by-moving-to-trash t)
+        delete-by-moving-to-trash t
+        dired-dwim-target t
+        dired-listing-switches "-alh"
+        dired-auto-revert-buffer t
+        dired-kill-when-opening-new-dired-buffer t)
   :bind (:map dired-mode-map
               ("<backspace>" . dired-up-directory)))
 
@@ -131,6 +136,12 @@
   :init
   (unless (display-graphic-p)
     (corfu-terminal-mode +1)))
+
+;; Regexp visual feedback in minibuffer
+(use-package minibuffer
+  :ensure nil
+  :config
+  (minibuffer-regexp-mode 1))
 
 ;; iSearch
 (use-package isearch
