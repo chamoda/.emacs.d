@@ -73,7 +73,9 @@
   :init
   (setq dired-create-destination-dirs 'ask
         dired-mouse-drag-files t
-        delete-by-moving-to-trash t))
+        delete-by-moving-to-trash t)
+  :bind (:map dired-mode-map
+              ("<backspace>" . dired-up-directory)))
 
 ;; Autorevert files and other stuff like dired
 (use-package autorevert 
