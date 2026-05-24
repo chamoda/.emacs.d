@@ -39,7 +39,8 @@
   :config
   (setq ring-bell-function 'ignore
         inhibit-startup-screen t
-        column-number-mode t)
+        column-number-mode t
+        text-mode-ispell-word-completion nil)
   (setq-default tab-width 4
                 indent-tabs-mode nil)
   ;; Fonts
