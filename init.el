@@ -61,6 +61,24 @@
   (load-theme 'gruber-darker t))
 
 ;;; ==================================
+;;; VIM EMULATION (EVIL)
+;;; ==================================
+
+;; Evil mode
+(use-package evil
+  :init
+  (setq evil-want-integration t
+        evil-want-keybinding nil
+        evil-want-C-u-scroll t
+        evil-undo-system 'undo-redo))
+
+;; Evil keybindings for many Emacs modes
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+
+;;; ==================================
 ;;; FILE MANAGEMENT & BACKUP SETTINGS
 ;;; ==================================
 
